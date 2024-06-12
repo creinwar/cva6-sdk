@@ -1,0 +1,6 @@
+cachetest
+cachetest-rv64
+cachetest-rv64-chs
+*.o
+*.dump
+*.csv

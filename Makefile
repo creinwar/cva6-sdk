@@ -79,17 +79,22 @@ $(CC): $(buildroot_defconfig) $(linux_defconfig) $(busybox_defconfig)
 
 all: $(CC) isa-sim
 
+# benchmark for the memory system (bandwidth wise)
+rootfs/bandwidth.elf:
+	$(MAKE) -C sw/bandwidth bandwidth-rv64
+	cp ./sw/bandwidth/bandwidth-rv64 $@
+
 # benchmark for the cache subsystem
 rootfs/cachetest.elf: $(CC)
-	cd ./cachetest/ && $(CC) cachetest.c -o cachetest.elf
-	cp ./cachetest/cachetest.elf $@
+	cd ./sw/cachetest/ && $(CC) cachetest.c -o cachetest.elf
+	cp ./sw/cachetest/cachetest.elf $@
 
 # cool command-line tetris
 rootfs/tetris: $(CC)
 	cd ./vitetris/ && make clean && ./configure CC=$(CC) && make
 	cp ./vitetris/tetris $@
 
-$(RISCV)/vmlinux: $(buildroot_defconfig) $(linux_defconfig) $(busybox_defconfig) $(CC) rootfs/cachetest.elf rootfs/tetris
+$(RISCV)/vmlinux: $(buildroot_defconfig) $(linux_defconfig) $(busybox_defconfig) $(CC) rootfs/bandwidth.elf rootfs/cachetest.elf rootfs/tetris
 	mkdir -p $(RISCV)
 	make -C buildroot $(buildroot-mk)
 	cp buildroot/output/images/vmlinux $@
