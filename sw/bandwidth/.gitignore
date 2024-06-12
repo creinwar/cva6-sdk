@@ -1,6 +1,6 @@
-cachetest
-cachetest-rv64
-cachetest-rv64-chs
+bandwidth
+bandwidth-rv64
+bandwidth-rv64-chs
 *.o
 *.dump
 *.csv
